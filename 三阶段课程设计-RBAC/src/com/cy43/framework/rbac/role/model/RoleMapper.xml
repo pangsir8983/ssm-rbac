@@ -20,6 +20,8 @@
             <include refid="sys_role_columns"/>
         FROM
             sys_role
+        WHERE
+            status != -1
         ORDER BY
             status DESC
     </select>
@@ -33,6 +35,43 @@
         WHERE
             role_key=#{role_key}
     </select>
+    
+    <!-- 3.注销角色 开始 -->
+    <!-- A.需要跟系统用户表解除关系 -->
+    <update id="settingRoleIsNull" parameterType="int">
+        UPDATE sys_user SET fk_role_id=null WHERE fk_role_id=#{role_id}
+    </update>
+    <!-- B.需要跟菜单和权限解除关系 -->
+    <delete id="deleteMenusByRoleId" parameterType="int">
+        DELETE FROM sys_role_menu_permission WHERE role_id=#{role_id}
+    </delete>
+    <!-- C.更新角色的状态 -->
+    <update id="deleteRole" parameterType="int">
+        UPDATE sys_role SET status=-1 WHERE role_id=#{role_id}
+    </update>
+    <!-- 注销角色 结束 -->
+    
+    <!-- 4.通过角色获取起对应的菜单和功能 -->
+    <select id="getRoleMenusFunctions" parameterType="_int" resultType="map">
+        SELECT
+            role_id,menu_id,permission
+        FROM
+            sys_role_menu_permission
+        WHERE
+            role_id=#{role_id}
+    
+    </select>
+    
+    <!-- 5.授权操作 -->
+    <insert id="addRolePermission" parameterType="list">
+        INSERT INTO 
+            sys_role_menu_permission
+        (id,role_id,menu_id,permission)
+        VALUES
+        <foreach collection="list" item="p" separator=",">
+            (UUID(),#{p.role_id},#{p.menu_id},#{p.permission})
+        </foreach>
+    </insert>
     
     
     

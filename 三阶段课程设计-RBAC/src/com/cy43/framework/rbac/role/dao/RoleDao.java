@@ -8,7 +8,9 @@
 package com.cy43.framework.rbac.role.dao;
 
 import java.util.List;
+import java.util.Map;
 import com.cy43.framework.rbac.role.model.Role;
+import com.cy43.framework.rbac.role.model.RolePermission;
 
 public interface RoleDao {
 	/**
@@ -63,4 +65,14 @@ public interface RoleDao {
 	List<Role> list();
 
 	int getCountByRoleKey(String role_key);
+
+	void settingRoleIsNull(int role_id);
+	void deleteMenusByRoleId(int role_id);
+	void deleteRole(int role_id);
+
+	List<Map<String,Object>> getRoleMenusFunctions(int role_id);
+
+	void addRolePermission(List<RolePermission> rolePermissions);
+
+
 }

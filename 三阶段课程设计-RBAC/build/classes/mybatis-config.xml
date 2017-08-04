@@ -7,6 +7,7 @@
         <package name="com.cy43.framework.rbac.user.model"/>
         <package name="com.cy43.framework.rbac.role.model"/>
         <package name="com.cy43.framework.rbac.menu.model"/>
+        <package name="com.cy43.framework.rbac.function.model"/>
         <package name="com.cy43.framework.commons.model"/>
     </typeAliases>
 </configuration>

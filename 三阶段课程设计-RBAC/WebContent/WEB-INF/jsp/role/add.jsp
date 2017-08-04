@@ -40,7 +40,7 @@
                         <label>角色状态</label>
                         <select id="status" name="status" class="select_show">
                             <option value="1">激活</option>
-                            <option value="-1">禁用</option>
+                            <option value="2">禁用</option>
                         </select>
                     </li>
                     <li>

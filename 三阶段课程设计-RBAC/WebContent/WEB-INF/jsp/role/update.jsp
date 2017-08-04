@@ -49,8 +49,8 @@
                                 <c:if test="${role.status==1 }">selected='selected'</c:if>           
                             >激活</option>
                             
-                            <option value="-1"
-                                <c:if test="${role.status==-1 }">selected='selected'</c:if>  
+                            <option value="2"
+                                <c:if test="${role.status==2 }">selected='selected'</c:if>  
                             >禁用</option>
                         </select>
                     </li>

@@ -32,7 +32,7 @@
         AND srmp.role_id =#{role_id}
     
     </select>
-    
+    <!-- 2.通过角色获取拥有的子菜单对应父节点信息 -->
     <select id="getParentMenusByRoleId" parameterType="int" resultMap="BaseResultMap">
         SELECT
             <include refid="sys_menu_columns"/>
@@ -51,6 +51,78 @@
             )
     </select>
     
+    <!-- 3.一对多,菜单和对应的功能信息 -->
+    <resultMap type="Menu" id="ChildMenuResultMap" extends="BaseResultMap">
+        <collection property="functionList" javaType="list" ofType="Function" >
+            <result column="menu_id" property="menu_id"/>
+            <result column="function_name" property="function_name"/>
+            <result column="function_key" property="function_key"/>
+        </collection>
+    </resultMap>
+    <select id="getChildMenuAndFunctions" resultMap="ChildMenuResultMap">
+    SELECT
+        <include refid="sys_menu_columns_alias">
+            <property name="alias" value="sm"/>
+        </include>
+        , 
+        smf.function_name,smf.function_key
+    FROM
+        sys_menu sm,sys_menu_function smf WHERE sm.menu_id = smf.menu_id
+    AND
+        sm.status = 1 AND sm.parent_id IS NOT NULL
+    </select>
+    
+    <!-- 4.遍历树形结构 -->
+    <resultMap type="MenuDTO" id="TreeResultMap">
+        <id column="parent_id" property="menu_id"/>
+        <result column="parent_name" property="menu_name"/>
+        <collection property="childMenuList" javaType="list" ofType="MenuDTO">
+            <id column="child_id" property="menu_id"/>
+            <result column="child_name" property="menu_name"/>
+        </collection>
+    </resultMap>
+    <select id="getTreeNode" resultMap="TreeResultMap">
+       SELECT
+            parent.menu_id parent_id,
+            parent.menu_name parent_name,
+            child.menu_id child_id,
+            child.menu_name child_name
+        FROM
+            (select menu_id,menu_name,sort from sys_menu WHERE parent_id is null and status=1) parent
+        LEFT JOIN 
+            (select menu_id,menu_name,parent_id from sys_menu WHERE parent_id is not null and status=1)  child 
+        ON parent.menu_id = child.parent_id
+        ORDER BY
+            parent.sort ASC
+    </select>
+    
+    <!-- 5.获取所有的父节点信息 -->
+    <select id="getParentNodeList" resultMap="BaseResultMap">
+        SELECT
+            <include refid="sys_menu_columns"/>
+        FROM
+            sys_menu
+        WHERE
+            status=1
+            AND
+            parent_id IS NULL
+        ORDER BY sort ASC
+    </select>
+    
+    <!-- 6.菜单的删除操作 -->
+    <!-- A.如果是父节点,需要检查是否有[显示]子节点,如果有无法进行删除操作 -->
+    <select id="getChildNodeCount" parameterType="_int" resultType="int">
+        SELECT COUNT(*) FROM sys_menu WHERE parent_id=#{menu_id} AND status = 1
+    </select>
+    <!-- B.如果是子节点,需要清空[中间表]的数据信息 -->
+    <delete id="deleteRoleMenu" parameterType="_int">
+        DELETE FROM sys_role_menu_permission WHERE menu_id=#{menu_id}
+    </delete>
+    <!-- C.将节点的状态更新为-1 -->
+    <update id="deleteMenu" parameterType="_int">
+        UPDATE sys_menu SET status=-1 WHERE menu_id=#{menu_id}
+    </update>
+    <!-- 结束 -->
     
     
     

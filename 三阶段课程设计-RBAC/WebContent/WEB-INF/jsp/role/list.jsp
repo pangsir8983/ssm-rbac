@@ -42,6 +42,7 @@
                 <ul class="toolbar">
                     <li class="click role-add"><span><img src="resource/admin/images/t01.png" /></span>新建角色</li>
                     <li class="click role-update"><span><img src="resource/admin/images/t02.png" /></span>维护角色</li>
+                    <li class="click role-delete"><span><img src="resource/admin/images/t03.png" /></span>注销角色</li>
                     <li class="click role-menu"><span><img src="resource/admin/images/t05.png" /></span>角色授权</li>
                 </ul>
 
