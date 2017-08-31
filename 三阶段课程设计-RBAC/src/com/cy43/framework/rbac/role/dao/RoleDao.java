@@ -9,6 +9,7 @@ package com.cy43.framework.rbac.role.dao;
 
 import java.util.List;
 import java.util.Map;
+import org.apache.ibatis.annotations.Param;
 import com.cy43.framework.rbac.role.model.Role;
 import com.cy43.framework.rbac.role.model.RolePermission;
 
@@ -73,6 +74,10 @@ public interface RoleDao {
 	List<Map<String,Object>> getRoleMenusFunctions(int role_id);
 
 	void addRolePermission(List<RolePermission> rolePermissions);
+
+	String getMenuFunctions(@Param("role_id") Integer role_id,@Param("menu_id") Integer menu_id);
+
+	List<Role> getEnabledRoleList();
 
 
 }

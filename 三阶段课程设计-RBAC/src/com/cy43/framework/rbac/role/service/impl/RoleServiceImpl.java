@@ -95,5 +95,13 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 	}
+	@Override
+	public String getMenuFunctions( Integer role_id , Integer menu_id ) {
+		return this.roleDao.getMenuFunctions(role_id, menu_id);
+	}
+	@Override
+	public List<Role> getEnabledRoleList() {
+		return this.roleDao.getEnabledRoleList();
+	}
 
 }

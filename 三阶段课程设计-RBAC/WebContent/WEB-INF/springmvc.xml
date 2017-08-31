@@ -76,6 +76,14 @@
             <mvc:exclude-mapping path="/sys/login"/>
             <bean class="com.cy43.framework.commons.interceptor.SessionInterceptor"/>
         </mvc:interceptor>
+        <!-- 权限拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/sys/**"/>
+            <mvc:exclude-mapping path="/sys/login"/>
+            <mvc:exclude-mapping path="/sys/loginout"/>
+            <mvc:exclude-mapping path="/sys/main"/>
+            <bean class="com.cy43.framework.commons.interceptor.PermissionInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
     
     <!-- 7.配置统一简单异常处理,目前我们匹配的映射为RuntimeException/Exception即可,后续再注解版本 -->

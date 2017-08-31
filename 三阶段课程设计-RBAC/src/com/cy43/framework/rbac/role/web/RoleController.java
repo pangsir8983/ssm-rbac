@@ -29,7 +29,7 @@ public class RoleController {
 	private MenuService menuService;
 
 	@GetMapping("/list")
-	public String list(Model model){
+	public String list(Model model,Integer pid,Integer rid){
 		model.addAttribute("roleList", this.roleService.list());
 		return "jsp/role/list";
 	}

@@ -10,13 +10,14 @@
         <result column="login_time" property="login_time" jdbcType="TIMESTAMP" />
         <result column="ip" property="ip" jdbcType="VARCHAR" />
         <result column="fk_role_id" property="fk_role_id" jdbcType="INTEGER" />
+        <result column="photo" property="photo" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="sys_user_columns" >
-        user_id, account, user_name, status, login_time, ip, fk_role_id
+        user_id, account, user_name, status, login_time, ip, fk_role_id,photo
     </sql>
     <sql id="sys_user_columns_alias" >
         ${alias}.user_id, ${alias}.account, ${alias}.user_name,  ${alias}.status,  
-        ${alias}.login_time,  ${alias}.ip,  ${alias}.fk_role_id
+        ${alias}.login_time,  ${alias}.ip,  ${alias}.fk_role_id,${alias}.photo
     </sql>
     <!-- 1.登录操作 -->
     <select id="login" resultMap="BaseResultMap">
@@ -66,6 +67,41 @@
     
     
     <!-- 分页 结束 -->
+    <!-- 3.通过用户ID获取,数据库中的密码 -->
+    <select id="getPassWordByUserId" parameterType="_int" resultType="string">
+        SELECT password FROM sys_user WHERE user_id=#{user_id}
+    </select>
+    <!-- 4.设置密码口令 -->
+    <update id="updatePassword">
+        UPDATE sys_user SET password=#{password} WHERE user_id=#{user_id}
+    </update>
+    <!-- 5.验证账号是否唯一 -->
+    <select id="getAccountCount" parameterType="string" resultType="_int">
+        SELECT COUNT(*) FROM sys_user WHERE account=#{account}
+    </select>
+    <!-- 6.用户彻底删除操作 -->
+    <delete id="deleteUser" parameterType="_int" >
+       UPDATE sys_user SET status=-1 WHERE user_id=#{user_id}
+    </delete>
+    <!-- 7.角色分配操作 -->
+    <update id="updateUserRole" >
+        UPDATE
+            sys_user
+        SET
+            fk_role_id=${fk_role_id}
+        WHERE
+            user_id=#{user_id}
+    </update>
+    <!-- 8.更新用户头像信息 -->
+    <update id="updateUserPhoto">
+        UPDATE
+            sys_user
+        SET
+            photo=#{photo}
+        WHERE
+            user_id=#{user_id}
+    </update>
+    
     
     
     <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >

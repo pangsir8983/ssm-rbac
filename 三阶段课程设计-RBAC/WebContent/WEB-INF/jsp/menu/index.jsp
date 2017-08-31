@@ -38,8 +38,8 @@
         </ol>
         <div class="row">
             <div class="col-md-11">
-                <a href="sys/menu/add?type=parent" target="menusIframe" class="btn btn-primary">新增父节点</a>
-                <a href="sys/menu/add?type=child" target="menusIframe" class="btn btn-warning">新建子节点</a>
+                <a href="sys/menu/add?type=parent" target="menusIframe" permission-data="CREATE_PARENT" class="btn btn-primary">新增父节点</a>
+                <a href="sys/menu/add?type=child" target="menusIframe" permission-data="CREATE_CHILD" class="btn btn-warning">新建子节点</a>
                 <a href="javascript:void(0)" id="refresh" class="btn btn-default">刷新</a>
             </div>
         </div>
@@ -101,6 +101,12 @@
                     window.location.href=window.location.href;
                 })
             });
+        </script>
+        
+         <!-- 权限控制 -->
+        <script type="text/javascript" src="resource/rbac/permissions.js"></script>
+        <script type="text/javascript">
+        permission_js.init('${sessionScope.role_menu_functions}');
         </script>
     </body>
 

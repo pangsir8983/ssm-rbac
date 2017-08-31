@@ -9,5 +9,7 @@
         <package name="com.cy43.framework.rbac.menu.model"/>
         <package name="com.cy43.framework.rbac.function.model"/>
         <package name="com.cy43.framework.commons.model"/>
+        <package name="com.cy43.framework.cms.content.model"/>
+        <package name="com.cy43.framework.rbac.dict.model"/>
     </typeAliases>
 </configuration>

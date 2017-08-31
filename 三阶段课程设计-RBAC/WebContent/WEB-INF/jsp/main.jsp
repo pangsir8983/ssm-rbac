@@ -34,7 +34,7 @@
     <div class="top">
         <!-- LOGO 内容应该可以改变  -->
         <div class="topleft">
-            <a href="main.html" target="_top">
+            <a href="sys/content" target="rightFrame">
                 <h1 style="height: 71px;width: 271px;font-size: 30px;color: honeydew;margin-top: 15px;margin-left: 40px;">
                     胖先森后台管理系统
                 </h1>
@@ -48,14 +48,17 @@
                         <img src="resource/admin/images/help.png" title="设置口令" class="helpimg"/>
                     </span>
 
-                    <a href="javascript:void(0)">设置口令</a>
+                    <a href="javascript:void(0)" id="password-update">设置口令</a>
                 </li>
                 <li><a href="javascript:void(0)">关于</a></li>
                 <li><a href="javascript:void(0)" id="logout">安全退出</a></li>
             </ul>
 
             <div class="user">
-                <img src="resource/admin/images/hanpang.png" alt="用户头像"/>
+                <!-- 设置头像 -->
+                <img
+                    src="attr/user/${sessionScope.session_user.photo }"
+                  onerror="resource/admin/images/hanpang.png" alt="用户头像"/>
                 <span>${sessionScope.session_user.account }</span>
                 <!-- <b>5</b> -->
             </div>
@@ -81,7 +84,7 @@
                         <c:if test="${child.parent_id eq parent.menu_id }">
                             <li>
 		                        <i class="icon-user"></i>
-		                        <a href="${child.url }" data-id="${child.menu_id }" target="rightFrame">${child.menu_name}</a>
+		                        <a href="${child.url }?pid=${child.menu_id }&rid=${sessionScope.session_user.fk_role_id}" data-id="${child.menu_id }" target="rightFrame">${child.menu_name}</a>
 		                    </li>
                         </c:if>
                     
@@ -96,7 +99,7 @@
     <div class="right">
         <div class="inner">
             <!-- 设置iframe -->
-            <iframe id="rightFrame" name="rightFrame" class="mainIframe" scrolling="no" frameborder="0" src="index.html"
+            <iframe id="rightFrame" name="rightFrame" class="mainIframe" scrolling="no" frameborder="0" src="sys/content"
                     onload="initIframe()"></iframe>
         </div>
     </div>
@@ -110,6 +113,21 @@
 <script src="resource/admin/plugin/layer/layer.js" type="text/javascript"></script>
 <script type="text/javascript" src="resource/admin/js/home.js"></script>
 <script type="text/javascript" src="resource/rbac/main.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#password-update").click(function(){
+		 layer.open({
+             title:"重新设置密码口令",
+             type: 2,
+             area: ['750px', '350px'],
+             fixed: false,
+             content: 'sys/user/password'
+         });
+	});
+});
+
+</script>
+
 </body>
 </html>
 </html>

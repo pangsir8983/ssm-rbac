@@ -60,13 +60,17 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    <!-- 5.启动服务器加载初始化数据 -->
+    <listener>
+        <listener-class>com.cy43.framework.commons.listener.InitDictDataListener</listener-class>
+    </listener>
 
     <!-- 请参考简书的博客 -->
-    <!-- 5.配置HttpServletRequest监听器,方便以后在任何层次都能获取ServletAPI -->
+    <!-- 6.配置HttpServletRequest监听器,方便以后在任何层次都能获取ServletAPI -->
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
-    <!-- 6.配置Log4j的监听器 -->
+    <!-- 7.配置Log4j的监听器 -->
     <context-param>
         <param-name>log4jConfigLocation</param-name>
         <param-value>classpath:log4j.properties</param-value>
@@ -81,12 +85,12 @@
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
-    <!-- 7.Spring解决缓存异常问题的监听器 -->
+    <!-- 8.Spring解决缓存异常问题的监听器 -->
     <listener>
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
     </listener>
 
     <welcome-file-list>
-        <welcome-file>index</welcome-file>
+        <welcome-file>front/index</welcome-file>
     </welcome-file-list>
 </web-app>

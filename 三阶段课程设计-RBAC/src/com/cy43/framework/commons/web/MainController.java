@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import com.cy43.framework.cms.content.service.ContentService;
 import com.cy43.framework.rbac.menu.service.MenuService;
 import com.cy43.framework.rbac.user.model.User;
 
@@ -14,6 +15,9 @@ public class MainController extends BaseController {
 
 	@Autowired
 	private MenuService menuService;
+
+	@Autowired
+	private ContentService contentService;
 
 	@GetMapping("/main")
 	public String main(Model model){
@@ -25,6 +29,19 @@ public class MainController extends BaseController {
 			model.addAttribute("parentMenus", this.menuService.getParentMenusByRoleId(role_id));
 		}
 		return "jsp/main";
+	}
+
+	@GetMapping("/content")
+	public String content(Model model){
+
+		model.addAttribute("teacherContentList", this.contentService.listNewContent(1));
+		model.addAttribute("peixunContentList", this.contentService.listNewContent(2));
+		model.addAttribute("studentContentList", this.contentService.listNewContent(3));
+		model.addAttribute("classContentList", this.contentService.listNewContent(4));
+		model.addAttribute("baomingContentList", this.contentService.listNewContent(5));
+
+
+		return "jsp/content";
 	}
 
 }

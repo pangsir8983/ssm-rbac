@@ -75,8 +75,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-offset-2 col-xs-10">
-                            <button type="button" id="menu-update" class="btn btn-primary">确认更新</button>
-                            <button type="button" id="menu-delete" class="btn btn-danger">彻底删除</button>
+                            <button type="button" id="menu-update" class="btn btn-primary" permission-data="UPDATE">确认更新</button>
+                            <button type="button" id="menu-delete" class="btn btn-danger" permission-data="DELETE">彻底删除</button>
                         </div>
                     </div>
                     <!-- 隐藏域 -->
@@ -145,6 +145,12 @@
                 	
                 })
             });
+        </script>
+        
+         <!-- 权限控制 -->
+        <script type="text/javascript" src="resource/rbac/permissions.js"></script>
+        <script type="text/javascript">
+        permission_js.init('${sessionScope.role_menu_functions}');
         </script>
     </body>
 

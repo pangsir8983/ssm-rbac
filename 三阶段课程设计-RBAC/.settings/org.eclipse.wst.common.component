@@ -2,6 +2,7 @@
     <wb-module deploy-name="三阶段课程设计-RBAC">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/ueditor_src"/>
         <property name="context-root" value="ssm"/>
         <property name="java-output-path" value="/三阶段课程设计-RBAC/build/classes"/>
     </wb-module>

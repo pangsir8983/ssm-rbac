@@ -40,10 +40,10 @@
             <div class="tools">
 
                 <ul class="toolbar">
-                    <li class="click role-add"><span><img src="resource/admin/images/t01.png" /></span>新建角色</li>
-                    <li class="click role-update"><span><img src="resource/admin/images/t02.png" /></span>维护角色</li>
-                    <li class="click role-delete"><span><img src="resource/admin/images/t03.png" /></span>注销角色</li>
-                    <li class="click role-menu"><span><img src="resource/admin/images/t05.png" /></span>角色授权</li>
+                    <li class="click role-add" permission-data="CREATE"><span><img src="resource/admin/images/t01.png" /></span>新建角色</li>
+                    <li class="click role-update" permission-data="UPDATE"><span><img src="resource/admin/images/t02.png" /></span>维护角色</li>
+                    <li class="click role-delete" permission-data="DELETE"><span><img src="resource/admin/images/t03.png" /></span>注销角色</li>
+                    <li class="click role-menu" permission-data="ROLE_MENU"><span><img src="resource/admin/images/t05.png" /></span>角色授权</li>
                 </ul>
 
             </div>
@@ -91,6 +91,10 @@
         <script type="text/javascript" src="resource/admin/js/jquery.js"></script>
         <script src="resource/admin/plugin/layer/layer.js" type="text/javascript"></script>
         <script type="text/javascript" src="resource/rbac/role.js"></script>
+        <script type="text/javascript" src="resource/rbac/permissions.js"></script>
+        <script type="text/javascript">
+        permission_js.init('${sessionScope.role_menu_functions}');
+        </script>
     </body>
 
 </html>

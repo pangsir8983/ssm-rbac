@@ -73,6 +73,28 @@
         </foreach>
     </insert>
     
+    <!-- 6.行转列,获取菜单+角色拥有的功能字符串使用的是逗号 -->
+    <select id="getMenuFunctions" resultType="string">
+        SELECT
+            GROUP_CONCAT(permission)
+        FROM
+            sys_role_menu_permission
+        WHERE
+            role_id =#{role_id}
+        AND menu_id =#{menu_id}
+        GROUP BY
+            menu_id
+    </select>
+    <!-- 7.获取角色可用的列表 -->
+    <select id="getEnabledRoleList" resultMap="BaseResultMap">
+        SELECT 
+            <include refid="sys_role_columns"/>
+        FROM
+            sys_role
+        WHERE
+            status=1
+    </select>
+    
     
     
     

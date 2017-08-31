@@ -16,4 +16,6 @@ public interface RoleService {
 
 	void addRolePermission(List<RolePermission> rolePermissions);
 	void deleteMenusByRoleId(int role_id);
+	String getMenuFunctions(Integer role_id,Integer menu_id);
+	List<Role> getEnabledRoleList();
 }

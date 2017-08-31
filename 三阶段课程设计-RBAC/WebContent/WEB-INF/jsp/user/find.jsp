@@ -13,10 +13,6 @@
 	*/
 	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-<%-- 
-	<base/>标签解决路径问题
-	参考文章:http://www.cnblogs.com/muqianying/archive/2012/03/16/2400280.html
---%>
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -37,7 +33,7 @@
         </div>
 
         <div class="rightinfo">
-            <form action="sys/user/find" method="get" id="searchForm">
+            <form  method="get" id="searchForm">
             <ul class="seachform1" style="width: 1000px;">
                 <!-- map传递数据 -->
                 <li><label>姓名</label><input name="query['user_name']" type="text" class="scinput1" value="${pager.query.user_name }"/></li>
@@ -46,18 +42,17 @@
                     <div class="vocation">
                         <select name="query['status']" class="select_show" style="height: 34px;">
                             <option value="">请选择用户状态</option>
-                            <option value="1"
-                                <c:if test="${pager.query.status==1 }">selected='selected'</c:if>
-                            >可用</option>
-                            <option value="2"
-                                <c:if test="${pager.query.status==2 }">selected='selected'</c:if>
-                            >禁用</option>
+                            <c:forEach items="${applicationScope.status }" var="status">
+                                <option value="${status.value }"
+                                    <c:if test="${pager.query.status==status.value }">selected='selected'</c:if>
+                                >${status.label }</option>
+                            </c:forEach>
                         </select>
                     </div>
                 </li>
                 <li>
                     <input id="searchBtn" type="button" class="scbtn"  style="height: 34px;" value="查询"/>
-                    <input id="user-add" type="button" class="scbtn1" style="height: 34px;"  value="新增系统用户"/>
+                    <input id="user-add" type="button" class="scbtn1"  permission-data="CREATE" style="height: 34px;"  value="新增系统用户"/>
                 </li>
                 
             </ul>
@@ -93,13 +88,13 @@
                             <span style="color: green;font-weight: bold;">可用</span>
                         </td>
                         <td>
-                            <a href="javascript:;" data-id="1" class="tablelink user-update">更新</a>
+                            <a href="javascript:;" data-id="${user.user_id }" permission-data="UPDATE" class="tablelink user-update">更新</a>
                             &nbsp;|&nbsp;
-                            <a href="javascript:;" data-id="1" class="tablelink user-delete">删除</a>
+                            <a href="javascript:;" data-id="${user.user_id }" permission-data="DELETE" class="tablelink user-delete">删除</a>
+                             &nbsp;|&nbsp;
+                            <a href="javascript:;" data-id="${user.user_id }" permission-data="UPLOAD" class="tablelink user-upload">头像设置</a>
                             &nbsp;|&nbsp;
-                            <a href="javascript:;" data-id="1" class="tablelink user-upload">上传</a>
-                            &nbsp;|&nbsp;
-                            <a href="javascript:;" data-id="1" class="tablelink user-update-role">分配角色</a>
+                            <a href="javascript:;" data-id="${user.user_id }" permission-data="USER_ROLE" class="tablelink user-update-role">分配角色</a>
                         </td>
 
                     </tr>
@@ -128,6 +123,12 @@
         <!-- 引入分页 -->
         <script type="text/javascript" src="resource/rbac/pager.js"></script>
         
+        <!-- 权限控制 -->
+        <script type="text/javascript" src="resource/rbac/permissions.js"></script>
+        <script type="text/javascript">
+        permission_js.init('${sessionScope.role_menu_functions}');
+        </script>
+        
         <script type="text/javascript">
             $(function () {
                 /**通过ID选择器绑定事件*/
@@ -135,9 +136,9 @@
                     parent.layer.open({
                         title:"系统用户管理 | 新建用户",
                         type: 2,
-                        area: ['750px', '500px'],
+                        area: ['750px', '300px'],
                         fixed: false,
-                        content: 'system-user-add.html'
+                        content: 'sys/user/add'
                     });
                 });
                 /**通过class选择器绑定事件*/
@@ -147,9 +148,9 @@
                     parent.layer.open({
                         title:"系统用户管理 | 更新用户",
                         type: 2,
-                        area: ['750px', '500px'],
+                        area: ['750px', '300px'],
                         fixed: false,
-                        content: 'system-user-update.html?user_id='+user_id
+                        content: 'sys/user/update/'+user_id//占位符传递数据
                     });
                 });
 
@@ -157,28 +158,37 @@
                 $(".user-delete").click(function () {
                     //获取自定属性值
                     var user_id = $(this).attr("data-id");//this是JS对象,知识点JS对象转Jquery对象
-                    var _self = this;
-                    parent.layer.confirm('你确定要执行改操作吗?', {icon: 2, title:'用户管理 | 提示信息'}, function(index){
-                        //可以使用Ajax完成上传操作
-
-                        //jquery操作DOM节点异常元素
-                        $(_self).parent().parent().fadeOut(function () {
-                           $(this).remove();
-                        })
-
+                    if(user_id<0){
+                        alert("该用户被锁定,不能进行删除操作");
+                        return false;
+                    }
+                    
+                    
+                    parent.layer.confirm('你确定要执行彻底删除操作吗?', {icon: 2, title:'用户管理 | 提示信息'}, function(index){
+                        //window.location.href="sys/user/delete/"+user_id;
+                        $.post("sys/user/delete/"+user_id,{_method:"delete"},function(data){
+                            if(data.flag=="success"){
+                                window.location.reload();
+                                return false;
+                            }else{
+                               alert(data.message);
+                               return false;
+                            }
+                        },"json");
+                        
                         parent.layer.close(index);
                     });
                 });
 
                 $(".user-update-role").click(function () {
-                    //获取自定属性值
+                    //获取自定属性值-请注意这里
                     var user_id = $(this).attr("data-id");
                     parent.layer.open({
                         title:"系统用户管理 | 设置角色",
                         type: 2,
-                        area: ['700px', '450px'],
+                        area: ['700px', '200px'],
                         fixed: false,
-                        content: 'system-user-role.html?user_id='+user_id
+                        content: 'sys/user/role?user_id='+user_id
                     });
                 });
                 $(".user-upload").click(function () {
@@ -187,9 +197,9 @@
                     parent.layer.open({
                         title:"系统用户管理 | 设置头像",
                         type: 2,
-                        area: ['400px', '250px'],
+                        area: ['700px', '350px'],
                         fixed: false,
-                        content: 'system-user-upload.html?user_id='+user_id
+                        content: 'sys/user/photo?user_id='+user_id
                     });
                 });
             })
